@@ -206,6 +206,7 @@ router.post('/data/send', auth, (req, res) => {
         data : '',
         status: 100
     }
+
     // some shit to send data to dash board
     return res.json(response)
 })
@@ -225,4 +226,3 @@ router.post('/data/recieve', auth, (req, res) => {
 
 module.exports = router
 
-// Hello there, Astronomy lovers! Here are some amazing nighttime sky events for you to watch and observe in this November 2021
