@@ -20,7 +20,7 @@ function generate_keys() {
 }
 
 router.get('/nodes/all', (req, res) => {
-    PatientReg.find((err, user) => {
+    User.find((err, user) => {
         if (err) { throw err; }
         else { res.status(200).json(user); }
     })
