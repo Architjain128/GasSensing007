@@ -1,10 +1,12 @@
-require('dotenv').config
+// require('dotenv').config
 const bcrypt = require("bcryptjs");
 const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const auth = require('../middleware/auth.js')
 const User = require('../models/user')
+const JWT_SECRET_TOKEN = 'd634ac61ded6906fa87a122463e1df846cee88da8ad713c306dfb39db204e77cd6101047d4e24cf5ed396559a68a261213c8cd3cea5cfdd143a6b5b8d0772189'
+
 
 // gen key
 // gen node
@@ -20,22 +22,35 @@ function generate_keys() {
 }
 
 router.get('/nodes/all', (req, res) => {
-    User.find((err, user) => {
-        if (err) { throw err; }
-        else { res.status(200).json(user); }
+    var response = {
+        status: 100,
+        data: []
+    }
+    console.log("ok")
+    User.find()
+    .then(users => {
+        response.data = users
+        response.status = 200
+        res.json(response)
+    })
+    .catch(err => {
+        response.status = 500
+        response.data = err
+        res.json(response)
     })
 })
 
 router.post('/nodes/register', async (req, res) => {
     const NodeId = req.body.NodeId
     let response = {
-        msg: ''
+        msg: '',
+        status: 100
     }
-    let PrivateKey = generate_keys()
-    let PublicKey = generate_keys()
+    let PrivateKey = "p"
+    let PublicKey = "p"
     if(!NodeId||!PrivateKey||!PublicKey){ 
         response.msg = "Empty Invalid"
-        res.status(400).json(response)
+        response.status = 400
     }
     else {
         const node = new User({
@@ -43,26 +58,27 @@ router.post('/nodes/register', async (req, res) => {
         })
         await node.save()
         .then(node => {
-            response.msg = "Empty node created a with id" + node.NodeId
-            console.log(msg)
-            return res.status(200).json(response);
+            response.msg = "Empty node created a with id " + node.NodeId
+            response.status = 200
         })
         .catch(err => {
             response.msg = "Error creating node"
-            console.log(msg)
-            return res.status(400).json(response);
+            response.status = 400
         })
     }
+    return res.json(response);
 });
 
 router.post('/user/signup', async (req, res) => {
     let response = {
         msg: '',
+        status: 100
     }
     const NodeId= req.body.NodeId
     if (!NodeId) {
         response.msg = "Empty Invalid"
-        res.status(400).json(response)
+        response.status = 400
+        return res.json(response)
     }
     else{
         var newww={
@@ -71,20 +87,24 @@ router.post('/user/signup', async (req, res) => {
             MobileNumber:req.body.MobileNumber,
             Email:req.body.Email
         }
-        newww.Password = bcrypt.hash(req.body.Password, 10)
-        User.findOneAndUpdate({ NodeId: NodeId },newww,(user,err)=>{
-            if(err){
-                response.msg = "Error creating user"
-                res.status(400).json(response)
+        newww.Password = await bcrypt.hash(req.body.Password, 10)
+        User.findOneAndUpdate({NodeId: NodeId,UserName:null}, {$set: newww}, {new: false})
+        .then(user => {
+            if(!user){
+                response.msg = "Node already associated with a user"
+                response.status = 400
+                return res.json(response)
             }
-            if (!user) {
-                response.msg = "Invalid NodeId"
-                res.status(400).json(response)
-            }
-            else {
+            else{
                 response.msg = "User created"
-                res.status(200).json(response)
+                response.status = 200
+                return res.json(response)
             }
+        })
+        .catch(err => {
+            response.msg = "Error creating user"
+            response.status = 400
+            return res.json(response)
         })
     }
 })
@@ -92,50 +112,66 @@ router.post('/user/signup', async (req, res) => {
 router.post('/user/login', async (req, res) => {
     let response = {
         msg: '',
+        status: 100
     }
+    const NodeId= req.body.NodeId
     const UserName = req.body.UserName
     const Password = req.body.Password
-    if (!UserName || !Password) {
+    if (!NodeId||!UserName || !Password) {
         response.msg = "Empty Invalid"
-        res.status(400).json(response)
+        response.status = 400
+        return res.json(response)
     }
     else {
-        User.findOne({ UserName: UserName }, (err, user) => {
+        User.findOne({ UserName: UserName , NodeId: NodeId}, (err, user) => {
             if (err) {
                 response.msg = "Error finding user"
-                res.status(400).json(response)
+                response.status = 400
+                return res.json(response)
             }
             else if (!user) {
                 response.msg = "Invalid UserName"
-                res.status(400).json(response)
+                response.status = 400
+                return res.json(response)
             }
             else {
-                const isMatch = bcrypt.compare(Password, user.Password)
-                if (!isMatch) {
-                    response.msg = "Invalid Password"
-                    res.status(400).json(response)
-                }
-                else {
-                    const usertokenidentity = {
-                        NodeID: user.NodeId,
-                        UserName: user.UserName,
-                        MobileNumber: user.MobileNumber,
-                        Email: user.Email,
-                        PrivateKey: user.PrivateKey,
+                bcrypt.compare(Password, user.Password,(err,isMatch) => {
+                    if (err) {
+                        response.msg = "Error finding user"
+                        response.status = 400
+                        return res.json(response)
+                        }
+                    else if (!isMatch) {
+                        response.msg = "Invalid Password"
+                        response.status = 400
+                        return res.json(response)
                     }
-                    const Token = jwt.sign(usertokenidentity, process.env.JWT_SECRET_TOKEN)
-                    res.cookie('user_session', Token, { httpOnly: true });
-                    res.status(200).send(response)
-                }
+                    else {
+                        const usertokenidentity = {
+                            NodeID: user.NodeId,
+                            UserName: user.UserName,
+                            MobileNumber: user.MobileNumber,
+                            Email: user.Email,
+                            PrivateKey: user.PrivateKey
+                        }
+                        const Token = jwt.sign(usertokenidentity, JWT_SECRET_TOKEN)
+                        res.cookie('user_session', Token, { httpOnly: true });
+                        response.msg = "User logged in"
+                        response.status = 200
+                        return res.json(response)
+                    }
+                })
             }
         })
     }
+    // return res.json(response)
 })
 
 router.post('/user/jwttoken', (req, res) => {
     let response = {
         msg: '',
-        token: ""
+        token: "",
+        status: 100
     }
     if (!req.body.NodeId) {
         console.log("User is Verified")
@@ -146,39 +182,47 @@ router.post('/user/jwttoken', (req, res) => {
         res.cookie('user_session', Token, { httpOnly: true });
         response.token = Token
         console.log(`User session token is: ${Token}`)
-        // 
-        res.status(200).send(response)
+        response.status = 200
     } else {
         console.log("Invalid login")
         response.msg = "Invalid user";
-        res.status(400).send(response)
+        response.status = 400
     }
+    return res.json(response)
 })
 
 router.post('/user/logout', (req, res) => {
+    let response = {
+        msg: 'Bye',
+        status: 200
+    }
     res.clearCookie("user_session");
-    res.status(200).send("Bye")
+    return res.json(response)
 })
 
 router.post('/data/send', auth, (req, res) => {
-
     let response = {
         msg: '',
-        data : ''
+        data : '',
+        status: 100
     }
     // some shit to send data to dash board
-    res.status(200).send(response)
+    return res.json(response)
 })
 
 router.post('/data/recieve', auth, (req, res) => {
 
     let response = {
         msg: '',
-        data : ''
+        data : '',
+        status: 100
     }
     // some shit to send data from node
-    res.status(200).send(response)
+    return res.json(response)
+    
 })
 
 
 module.exports = router
+
+// Hello there, Astronomy lovers! Here are some amazing nighttime sky events for you to watch and observe in this November 2021

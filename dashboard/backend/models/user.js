@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const User = new Schema(
     {
-        NodeId:{ type: String, required: true },
+        NodeId:{ type: String, required: true , unique: true},
         PrivateKey:{ type: String, required: true },
         PublicKey:{ type: String, required: true },
         UserName:{ type: String},
