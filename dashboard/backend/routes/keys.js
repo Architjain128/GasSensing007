@@ -1,41 +1,35 @@
 // require('dotenv').config
 const bcrypt = require("bcryptjs");
 const express = require('express')
+const crypto = require('crypto');
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const auth = require('../middleware/auth.js')
 const User = require('../models/user')
 const JWT_SECRET_TOKEN = 'd634ac61ded6906fa87a122463e1df846cee88da8ad713c306dfb39db204e77cd6101047d4e24cf5ed396559a68a261213c8cd3cea5cfdd143a6b5b8d0772189'
-const crypto = require('crypto');
+const stringToEncrypt = 'OurProjectIsBestAndElonMuskWillSwapOurCompanyWithHisTesla';
 
-// gen key
-// gen node
-// add user(signup)
-// login 
-// enctypt data
-// decrypt data
-// get data
 
-function generateKey() {
+async function generateKey() {
     return crypto.generateKeyPairSync('rsa', {
         modulusLength: 2048,
         publicKeyEncoding: {
-          type: 'spki',
-          format: 'pem'
+            type: 'spki',
+            format: 'pem'
         },
         privateKeyEncoding: {
-          type: 'pkcs8',
-          format: 'pem'
+            type: 'pkcs8',
+            format: 'pem'
         }
-      }); 
+    }); 
 }
 
 function encrypt(string, key){
     return crypto.publicEncrypt(
         {
-          key: key.publicKey,
-          padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-          oaepHash: "sha256",
+            key: key.publicKey,
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+            oaepHash: "sha256",
         },
         // We convert the data string to a buffer using `Buffer.from`
         Buffer.from(string)
@@ -46,25 +40,17 @@ function decrypt(encrypted_string, key)
 {
     return  crypto.privateDecrypt(
         {
-          key: key.privateKey,
-          padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-          oaepHash: "sha256",
+            key: key.privateKey,
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+            oaepHash: "sha256",
         },
         encrypted_string
-      );
+    ).toString('utf-8');
 }
 
-const stringToEncrypt = 'Pulkit';
-const key = generateKey();
-const encrypt_string = encrypt(stringToEncrypt, key);
-const decrypt_string = decrypt(encrypt_string, key);
 
-console.log('The encrypted string is', encrypt_string);
-console.log(decrypt_string.toString())
 
-function generate_keys() {
-    return Math.random().toString(10).substring(2, 2 + parseInt(process.env.PATIENT_ID_LEN));
-}
+
 
 router.get('/nodes/all', (req, res) => {
     var response = {
@@ -91,8 +77,9 @@ router.post('/nodes/register', async (req, res) => {
         msg: '',
         status: 100
     }
-    let PrivateKey = "p"
-    let PublicKey = "p"
+    let key= await generateKey()
+    let PrivateKey = key.privateKey
+    let PublicKey = key.publicKey
     if(!NodeId||!PrivateKey||!PublicKey){ 
         response.msg = "Empty Invalid"
         response.status = 400
