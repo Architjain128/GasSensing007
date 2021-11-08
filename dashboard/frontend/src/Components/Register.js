@@ -44,23 +44,23 @@ export default class Register extends Component {
 
    
   onChangeUserName(event) {
-    this.setState({ username: event.target.value });
+    this.setState({ UserName: event.target.value });
   }
 
   onChangeEmail(event) {
-    this.setState({ email: event.target.value });
+    this.setState({ Email: event.target.value });
   }
 
   onChangeMobileNumber(event) {
-    this.setState({ mobilenumber: event.target.value });
+    this.setState({ MobileNumber: event.target.value });
   }
 
   onChangePassword(event) {
-    this.setState({ password: event.target.value });
+    this.setState({ Password: event.target.value });
   }
 
   onChangeNodeId(event) {
-    this.setState({ nodeid: event.target.value });
+    this.setState({ NodeId: event.target.value });
   }
 
   onSubmit(e) {
@@ -68,24 +68,20 @@ export default class Register extends Component {
 
         var ind = document.getElementById("role");
         const newUser = {
-            username: this.state.username,
-            email: this.state.email,
-            mobilenumber: this.state.mobilenumber,
-            password: this.state.password,
-            nodeid: this.state.nodeid
+            UserName: this.state.UserName,
+            Email: this.state.Email,
+            MobileNumber: this.state.MobileNumber,
+            Password: this.state.Password,
+            NodeId: this.state.NodeId
         }
 
         const registerhere = async () => {
             try {
-                    // alert(newUser.username)
-                    // alert(newUser.email)
-                    // alert(newUser.mobilenumber)
-                    // alert(newUser.password)
-                    // alert(newUser.nodeid)
                     const res = await axios.post('http://localhost:6050/user/signup', newUser);
                     if(res.status === 200)
                     {
-                        alert("Created user " + res.data.UserName + "\nRedirecting to Login page :-)")
+                        // alert("Created user " + res.data.UserName + "\nRedirecting to Login page :-)")
+                        alert(res.data.UserName)
                         window.location.href='http://localhost:3000/login'
                     }
                     if(res.status === 205)
@@ -129,10 +125,10 @@ export default class Register extends Component {
                       margin="normal"
                       required
                       fullWidth
-                      name="username"
+                      name="UserName"
                       label="UserName"
                       type="text"
-                      id="username"
+                      id="UserName"
                       onChange = {this.onChangeUserName}
                       />
                       
@@ -141,10 +137,10 @@ export default class Register extends Component {
                       margin="normal"
                       required
                       fullWidth
-                      name="email"
+                      name="Email"
                       label="Email"
                       type="text"
-                      id="email"
+                      id="Email"
                       onChange = {this.onChangeEmail}
                       />
 
@@ -153,10 +149,10 @@ export default class Register extends Component {
                       margin="normal"
                       required
                       fullWidth
-                      name="mobilenumber"
+                      name="MobileNumber"
                       label="Mobile No."
                       type="text"
-                      id="mobilenumber"
+                      id="MobileNumber"
                       onChange = {this.onChangeMobileNumber}
                       />
 
@@ -165,10 +161,10 @@ export default class Register extends Component {
                           margin="normal"
                           required
                           fullWidth
-                          name="password"
+                          name="Password"
                           label="Password"
                           type="password"
-                          id="password"
+                          id="Password"
                           onChange = {this.onChangePassword}
                       />
 
@@ -177,10 +173,10 @@ export default class Register extends Component {
                           margin="normal"
                           required
                           fullWidth
-                          name="nodeid"
+                          name="NodeId"
                           label="Node Id"
                           type="password"
-                          id="nodeid"
+                          id="NodeId"
                           onChange = {this.onChangeNodeId}
                       />
 

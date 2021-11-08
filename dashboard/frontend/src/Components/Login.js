@@ -9,8 +9,8 @@ export default class Login extends Component {
     super(props);
 
     this.state = {
-      username: "",
-      password: ""
+      UserName: "",
+      Password: ""
     };
 
     this.onChangeUserName = this.onChangeUserName.bind(this);
@@ -34,8 +34,8 @@ export default class Login extends Component {
       e.preventDefault();
 
         const newUser = {
-            username: this.state.username,
-            password: this.state.password
+            UserName: this.state.UserName,
+            Password: this.state.Password
         }
 
         const loginhere = async () => {
@@ -70,7 +70,7 @@ export default class Login extends Component {
                     }
                 } 
             catch (err) {
-                //  alert(err);
+                 alert(err);
                 }    
         };
 
@@ -102,10 +102,10 @@ export default class Login extends Component {
                       margin="normal"
                       required
                       fullWidth
-                      name="username"
+                      name="UserName"
                       label="UserName"
                       type="text"
-                      id="username"
+                      id="UserName"
                       onChange = {this.onChangeUserName}
                       />
 
@@ -114,10 +114,10 @@ export default class Login extends Component {
                           margin="normal"
                           required
                           fullWidth
-                          name="password"
+                          name="Password"
                           label="Password"
                           type="password"
-                          id="password"
+                          id="Password"
                           onChange = {this.onChangePassword}
                       />
                       <br/>
