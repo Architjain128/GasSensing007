@@ -8,7 +8,7 @@ const auth = require('../middleware/auth.js')
 const User = require('../models/user')
 const JWT_SECRET_TOKEN = 'd634ac61ded6906fa87a122463e1df846cee88da8ad713c306dfb39db204e77cd6101047d4e24cf5ed396559a68a261213c8cd3cea5cfdd143a6b5b8d0772189'
 const stringToEncrypt = 'OurProjectIsBestAndElonMuskWillSwapOurCompanyWithHisTesla';
-
+const axios = require('axios');
 
 async function generateKey() {
     return crypto.generateKeyPairSync('rsa', {
@@ -24,16 +24,15 @@ async function generateKey() {
     }); 
 }
 
-function encrypt(string, key){
+async function encrypt(string, key){
     return crypto.publicEncrypt(
         {
             key: key.publicKey,
             padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
             oaepHash: "sha256",
         },
-        // We convert the data string to a buffer using `Buffer.from`
         Buffer.from(string)
-    );
+    ).toString('base64');
 }
 
 function decrypt(encrypted_string, key)
@@ -232,15 +231,62 @@ router.post('/user/logout', (req, res) => {
     return res.json(response)
 })
 
-router.post('/data/send', auth, (req, res) => {
+router.post('/data/send', async (req, res) => {
     let response = {
         msg: '',
         data : '',
         status: 100
     }
+    let data = req.body
+    // console.log(data)
+    let fl=false
+    await User.findOne({ NodeId: data.NodeId })
+    .then(user => {
+        if (!user) {
+            response.msg = "Not registered"
+            response.status = 400
+            return res.json(response)
+        }
+        else {
+            fl=true
+            console.log(data)
+            data.data.field1 = encrypt(data.data.field1, user.PublicKey)
+        }
+    })
+    .catch(err => {
+        response.msg = "Error finding user"
+        response.status = 400
+        return res.json(response)
+    })
 
-    // some shit to send data to dash board
-    return res.json(response)
+    if(fl){
+        console.log(data)
+        await axios.get(`http://localhost:6050/nodes/all`)
+        .then(res => {
+            if(!res || res.data.status == 400 ){
+                response.msg = "No nodes found"
+                response.status = 400
+                return res.json(response)
+            }
+            else{
+                response.data = res.data.data
+                response.status = 200
+                return res.json(response)
+            }
+        })
+        .catch(err => {
+            response.msg = "Error finding nodes"
+            response.status = 400
+            return res.json(response)
+        })
+    }
+    else{
+        response.msg = "Error finding user"
+        response.status = 400
+        return res.json(response)
+    }
+    // some shit to send data to the m2m
+    // return res.json(response)
 })
 
 router.post('/data/recieve', auth, (req, res) => {
@@ -250,6 +296,7 @@ router.post('/data/recieve', auth, (req, res) => {
         data : '',
         status: 100
     }
+    
     // some shit to send data from node
     return res.json(response)
     
