@@ -10,22 +10,28 @@ export default class Login extends Component {
 
     this.state = {
       UserName: "",
-      Password: ""
+      Password: "",
+      NodeId: ""
     };
 
     this.onChangeUserName = this.onChangeUserName.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeNodeId = this.onChangeNodeId.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   // this fxn updates with each letter written under password section
   onChangePassword(event) {
-    this.setState({ password: event.target.value });
+    this.setState({ Password: event.target.value });
   }
 
   // this fxn updates with each letter written under email section
   onChangeUserName(event) {
-    this.setState({ username: event.target.value });
+    this.setState({ UserName: event.target.value });
+  }
+
+  onChangeNodeId(event) {
+    this.setState({ NodeId: event.target.value });
   }
 
   // this fxn will be called when user clicks the submit btn on login page
@@ -35,7 +41,8 @@ export default class Login extends Component {
 
         const newUser = {
             UserName: this.state.UserName,
-            Password: this.state.Password
+            Password: this.state.Password,
+            NodeId: this.state.NodeId
         }
 
         const loginhere = async () => {
@@ -56,17 +63,9 @@ export default class Login extends Component {
                             // alert(err)
                         }
                     }
-                    if(res.status === 204)
+                    else
                     {
-                        alert("Invalid Email!");
-                    }
-                    if(res.status === 205)
-                    {
-                        alert("Email not found!");
-                    }
-                    if(res.status === 206)
-                    {
-                        alert("Incorrect Password");
+                      alert("err")
                     }
                 } 
             catch (err) {
@@ -83,7 +82,7 @@ export default class Login extends Component {
         <Box 
         bgcolor="white"
         boxShadow="10"
-        borderColor="purple"
+        borderColor="blue"
         borderRadius="15px"
         textAlign="center"
         p='30px'
@@ -119,6 +118,18 @@ export default class Login extends Component {
                           type="password"
                           id="Password"
                           onChange = {this.onChangePassword}
+                      />
+
+                      <TextField
+                          variant="standard"
+                          margin="normal"
+                          required
+                          fullWidth
+                          name="NodeId"
+                          label="Node Id"
+                          type="password"
+                          id="NodeId"
+                          onChange = {this.onChangeNodeId}
                       />
                       <br/>
                       <br/>

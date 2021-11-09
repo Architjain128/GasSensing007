@@ -2,13 +2,15 @@ import React from 'react';
 import Login from './Components/Login';
 import Register from './Components/Register';
 import Dashboard from './Components/Dashboard';
+import Lineplot from './Components/Lineplot';
+import Navbar from './Components/NavigationBar'
 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 function App() {
-  //PLEASE DO REFRESH AFTER STARTING MY APP...IT'S WORKING
   return (
     <Router>
+    <Navbar/>
     <div className="App">
       <Switch>
       <Route path="/" exact component={Login}/>

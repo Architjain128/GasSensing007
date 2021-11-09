@@ -84,13 +84,9 @@ export default class Register extends Component {
                         alert(res.data.UserName)
                         window.location.href='http://localhost:3000/login'
                     }
-                    if(res.status === 205)
+                    else
                     {
-                        alert("Ensure that email id is valid\nName,Email and Password must be atleast 4 characters long");
-                    }
-                    if(res.status === 204)
-                    {
-                        alert("Email already exists!");
+                        alert("Err");
                     }
                 } 
             catch (err) {
@@ -106,7 +102,7 @@ export default class Register extends Component {
         <Box 
         bgcolor="white"
         boxShadow="10"
-        borderColor="purple"
+        borderColor="blue"
         borderRadius="15px"
         textAlign="center"
         p='30px'
