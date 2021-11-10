@@ -93,7 +93,14 @@ export default class Register extends Component {
                  alert(err);
             }    
         };
-        registerhere();
+        if (this.state.UserName == "" || this.state.Password == "" || this.state.NodeId == "" || this.state.Email == "" || this.state.MobileNumber == "")
+        {
+              alert("NULL values are not supported")
+        }
+        else
+        {
+          registerhere();
+        }
   }
 
   render() {

@@ -19,6 +19,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
+import { DataGrid, RowsProp, ColDef } from "@material-ui/data-grid";
 
 
 const drawerWidth = 240;
@@ -85,7 +86,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
+// TABLE
+const getTotal = (params) => params.getValue(params.id, 'maths')  + params.getValue(params.id, 'science')
+const columns = [
+  { field: 'maths', headerName: 'Maths', width: 130 },
+  { field: 'science', headerName: 'Science', width: 130 },
+  {
+  field: 'Total',
+  headerName: 'Total marks',
+  width: 160,
+  valueGetter: getTotal,
+  },
+  ];
+  const rows = [
+  { id: 1, maths: 75, science: 60 },
+  { id: 2, maths: 80, science: 70 },
+  { id: 3, maths: 50, science: 80 },
+  { id: 4, maths: 80, science: 60 },
+  { id: 5, maths: 100, science: 90 },
+  ];
+
+
 export default function Marketplace(props) {
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [home, setHome] = React.useState(true);
@@ -159,7 +184,7 @@ export default function Marketplace(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Home Page
+            Home Page                 
           </Typography>
         </Toolbar>
       </AppBar>
@@ -222,6 +247,9 @@ export default function Marketplace(props) {
         {data === true ? <h1>Data Page</h1> : null}
       </main> */}
       {/* CONTENT OF THE ALERT PAGE COMES HERE */}
+      <div style={{ height: 400, width: '100%' }}>
+      <DataGrid rows={rows} columns={columns} />
+    </div>
     </div>
   );
 }
