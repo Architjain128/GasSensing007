@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import '../files/css/login.css'
 import { DataGrid, RowsProp, ColDef } from "@material-ui/data-grid";
-import { Line } from 'react-chartjs-2';
+import '../files/css/login.css'
 import axios from 'axios';
 
 const state = {
@@ -28,17 +27,17 @@ const columns = [
 
 var rows = []
 
-export default class SubHome extends Component {
+export default class SubAlert extends Component {
     constructor(props) {
         super(props);
     }
     componentDidMount(){
         const axios = require('axios');
         async function aaa(){
-            await axios.get("https://cors-anywhere.herokuapp.com/{https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4}",{
+            await axios.get("https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4",{
                 headers : {
                         "X-M2M-Origin": "fRZvzNA7Bp:i43Yn0WPem",
-                        // "Access-Control-Allow-Origin": "https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4",
+                        // "Access-Control-Allow-Origin": "*",
                         // "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
                     }
         
@@ -82,32 +81,14 @@ export default class SubHome extends Component {
     render() {
         return (
             <div>
-                <div style={{height:"400px"}}>
-                <h2>Below are the latest 10 readings:</h2>
-                    <DataGrid rows={rows} columns={columns}/>
-                </div>
-
-                <br/>
-                <br/>
-                <br/>
-                <h2>Graph Plotting:</h2>
-                <div style={{height:"100px", width:"1000px"}}>
-                <Line
-                    data={state}
-                    options={{
-                    title:{
-                        display:true,
-                        text:'Gas sensed',
-                        fontSize:20
-                    },
-                    legend:{
-                        display:true,
-                        position:'right'
-                    }
-                    }}
-                />
-                </div>
+            <br/>
+            <br/>
+            <br/>
+            <div style={{height:"400px"}}>
+            <h2>Below are the latest 10 readings:</h2>
+                <DataGrid rows={rows} columns={columns}/>
             </div>
+        </div>
         );
     }
 }

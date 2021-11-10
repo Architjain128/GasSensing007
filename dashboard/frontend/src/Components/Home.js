@@ -88,11 +88,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
-// TABLE
-
-
-
 export default function Marketplace(props) {
   
   const classes = useStyles();
@@ -100,7 +95,6 @@ export default function Marketplace(props) {
   const [home, setHome] = React.useState(true);
   const [alert, setAlert] = React.useState(false);
   const [data, setData] = React.useState(false);
-  const [graph, setGraph] = React.useState(false);  
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -113,7 +107,6 @@ export default function Marketplace(props) {
   const homezz = () =>{
     setAlert(false);
     setData(false);
-    setGraph(false);
     setHome(true)
     window.location.href='/home'
   }
@@ -121,7 +114,6 @@ export default function Marketplace(props) {
   const alertzz = () =>{
     setAlert(true);
     setData(false);
-    setGraph(false);
     setHome(false);
     window.location.href='/alert'
   }
@@ -129,17 +121,8 @@ export default function Marketplace(props) {
   const datazz = () =>{
     setAlert(false);
     setData(true);
-    setGraph(false);
     setHome(false)
     window.location.href='/data'
-  }
-
-  const graphzz = () =>{
-    setAlert(false);
-    setData(false);
-    setGraph(true);
-    setHome(false);
-    window.location.href='/graph'
   }
 
   const logoutme = () => {
@@ -206,10 +189,6 @@ export default function Marketplace(props) {
             <ListItem button key={"Data"} onClick={datazz}>
               <ListItemIcon> <DataUsageIcon/></ListItemIcon>
               <ListItemText primary={"Data"} />
-            </ListItem>
-            <ListItem button key={"Graph"} onClick={graphzz}>
-              <ListItemIcon> <ShowChartIcon/></ListItemIcon>
-              <ListItemText primary={"Graph"} />
             </ListItem>
         </List>
         <Divider />

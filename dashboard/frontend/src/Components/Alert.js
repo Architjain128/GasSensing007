@@ -22,7 +22,7 @@ import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
-import SubAlert from './sub_alert';
+import SubAlert from './sub-alert';
 
 const drawerWidth = 240;
 
@@ -94,7 +94,6 @@ export default function Marketplace(props) {
   const [home, setHome] = React.useState(false);
   const [alert, setAlert] = React.useState(true);
   const [data, setData] = React.useState(false);
-  const [graph, setGraph] = React.useState(false);  
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -107,7 +106,6 @@ export default function Marketplace(props) {
   const homezz = () =>{
     setAlert(false);
     setData(false);
-    setGraph(false);
     setHome(true)
     window.location.href='/home'
   }
@@ -115,7 +113,6 @@ export default function Marketplace(props) {
   const alertzz = () =>{
     setAlert(true);
     setData(false);
-    setGraph(false);
     setHome(false);
     window.location.href='/alert'
   }
@@ -123,17 +120,8 @@ export default function Marketplace(props) {
   const datazz = () =>{
     setAlert(false);
     setData(true);
-    setGraph(false);
     setHome(false)
     window.location.href='/data'
-  }
-
-  const graphzz = () =>{
-    setAlert(false);
-    setData(false);
-    setGraph(true);
-    setHome(false);
-    window.location.href='/graph'
   }
 
   const logoutme = () => {
@@ -201,10 +189,6 @@ export default function Marketplace(props) {
               <ListItemIcon> <DataUsageIcon/></ListItemIcon>
               <ListItemText primary={"Data"} />
             </ListItem>
-            <ListItem button key={"Graph"} onClick={graphzz}>
-              <ListItemIcon> <ShowChartIcon/></ListItemIcon>
-              <ListItemText primary={"Graph"} />
-            </ListItem>
         </List>
         <Divider />
         <List>
@@ -218,7 +202,7 @@ export default function Marketplace(props) {
       {/* STATES ARE CREATED FOR EACH OF THESE THINGS */}
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <SubAlert></SubAlert>
+        <SubAlert/>
       </main> 
       {/* CONTENT OF THE ALERT PAGE COMES HERE */}
     </div>
