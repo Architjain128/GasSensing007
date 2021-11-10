@@ -24,7 +24,7 @@ async function generateKey() {
     }); 
 }
 
-async function encrypt(string, key){
+function encrypt(string, key){
     return crypto.publicEncrypt(
         {
             key: key.publicKey,
@@ -231,76 +231,115 @@ router.post('/user/logout', (req, res) => {
     return res.json(response)
 })
 
-router.post('/data/send', async (req, res) => {
-    let response = {
-        msg: '',
-        data : '',
-        status: 100
-    }
-    let data = req.body
-    // console.log(data)
-    let fl=false
-    await User.findOne({ NodeId: data.NodeId })
-    .then(user => {
-        if (!user) {
-            response.msg = "Not registered"
-            response.status = 400
-            return res.json(response)
-        }
-        else {
-            fl=true
-            console.log(data)
-            data.data.field1 = encrypt(data.data.field1, user.PublicKey)
-        }
-    })
-    .catch(err => {
-        response.msg = "Error finding user"
-        response.status = 400
-        return res.json(response)
-    })
 
-    if(fl){
-        console.log(data)
-        await axios.get(`http://localhost:6050/nodes/all`)
-        .then(res => {
-            if(!res || res.data.status == 400 ){
-                response.msg = "No nodes found"
-                response.status = 400
-                return res.json(response)
-            }
-            else{
-                response.data = res.data.data
-                response.status = 200
-                return res.json(response)
-            }
-        })
-        .catch(err => {
-            response.msg = "Error finding nodes"
-            response.status = 400
-            return res.json(response)
-        })
-    }
-    else{
-        response.msg = "Error finding user"
-        response.status = 400
-        return res.json(response)
-    }
-    // some shit to send data to the m2m
-    // return res.json(response)
-})
 
-router.post('/data/recieve', auth, (req, res) => {
+// router.post('/data/send', async (req, res) => {
+//     let response = {
+//         msg: '',
+//         data : '',
+//         user: '',
+//         status: 100
+//     }
+//     let data = req.body
+//     // console.log(data)
+//     let fl=false
+//     await User.findOne({ NodeId: data.NodeId })
+//     .then(user => {
+//         if (!user) {
+//             response.msg = "Not registered"
+//             response.status = 400
+//             return res.json(response)
+//         }
+//         else {
+//             fl=true
+//             console.log(data)
+//             response.user = user
+//             // data.data.field1 = encrypt(data.data.field1, user.PublicKey)
+//             console.log(data)
+//             response.data = data
+//             return res.json(response)
+//         }
+//     })
+//     .then((ttt) => {
+//         console.log(ttt.statusCode)
+//         if(fl){
+//             axios.get(`https://api.thingspeak.com/update?api_key=2A1DMVLKBR41Q3PT&field1=`+data.data.field1)
+//             response.msg = "Data sent"
+//             response.status = 200
+//             .then(res => {
+//                 if(!res || res.data.status == 400 ){
+//                     response.msg = "No nodes found"
+//                     response.status = 400
+//                     return res.json(response)
+//                 }
+//                 else{
+//                     response.user = "archit"
+//                     response.status = 200
+//                     return res.json(response)
+//                 }
+//             })
+//             .catch(err => {
+//                 response.msg = "Error finding nodes"
+//                 response.status = 400
+//                 return res.json(response)
+//             })
+//             // return res.json(response)
+//         }
+//         else{
+//             response.msg = "Error finding user1"
+//             response.status = 400
+//             return res.json(response)
+//         }
+//     })
+//     .catch(err => {
+//         response.msg = "Error finding user2"
+//         response.status = 400
+//         return res.json(response)
+//     })
 
-    let response = {
-        msg: '',
-        data : '',
-        status: 100
-    }
+//     // if(fl){
+//     //     console.log(data)
+//     //     await axios.get(`https://api.thingspeak.com/update?api_key=2A1DMVLKBR41Q3PT&field1=`+data.data.field1)
+//     //     .then(res => {
+//     //         if(!res || res.data.status == 400 ){
+//     //             response.msg = "No nodes found"
+//     //             response.status = 400
+//     //             return res.json(response)
+//     //         }
+//     //         else{
+//     //             response.data = res.data.data
+//     //             response.status = 200
+//     //             return res.json(response)
+//     //         }
+//     //         return res.json(response)
+//     //     })
+//     //     .catch(err => {
+//     //         response.msg = "Error finding nodes"
+//     //         response.status = 400
+//     //         return res.json(response)
+//     //     })
+//     // }
+//     // else{
+//     //     response.msg = "Error finding user"
+//     //     response.status = 400
+//     //     return res.json(response)
+//     // }
+//     // some shit to send data to the m2m
+//     // return res.json(response)
+// })
+
+// router.post('/data/recieve', auth, (req, res) => {
+
+//     let response = {
+//         msg: '',
+//         data : '',
+//         status: 100
+//     }
     
-    // some shit to send data from node
-    return res.json(response)
+//     // some shit to send data from node
+//     return res.json(response)
     
-})
+// })
 
 
 module.exports = router

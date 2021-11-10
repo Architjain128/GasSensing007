@@ -54,3 +54,4 @@ encrypted_text = encrypt(text, public_key);
 console.log(encrypted_text);
 decrypted_text = decrypt(Buffer.from(encrypted_text, 'base64'), private_key);
 console.log(decrypted_text);
+
