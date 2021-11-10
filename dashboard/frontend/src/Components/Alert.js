@@ -22,6 +22,7 @@ import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
+import SubAlert from './sub_alert';
 
 const drawerWidth = 240;
 
@@ -215,13 +216,10 @@ export default function Marketplace(props) {
 
       </Drawer>
       {/* STATES ARE CREATED FOR EACH OF THESE THINGS */}
-      {/* <main className={classes.content}>
+      <main className={classes.content}>
         <div className={classes.toolbar} />
-        {home === true ? <h1>Home Page</h1> : null}
-        {alert === true ? <h1>Alert Page</h1> : null}
-        {graph === true ? <h1>Graph Page</h1> : null}
-        {data === true ? <h1>Data Page</h1> : null}
-      </main> */}
+        <SubAlert></SubAlert>
+      </main> 
       {/* CONTENT OF THE ALERT PAGE COMES HERE */}
     </div>
   );

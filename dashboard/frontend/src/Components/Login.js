@@ -133,7 +133,7 @@ export default class Login extends Component {
                           fullWidth
                           name="NodeId"
                           label="Node Id"
-                          type="password"
+                          type="text"
                           id="NodeId"
                           onChange = {this.onChangeNodeId}
                       />

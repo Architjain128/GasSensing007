@@ -20,6 +20,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import DataUsageIcon from '@material-ui/icons/DataUsage';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 import { DataGrid, RowsProp, ColDef } from "@material-ui/data-grid";
+import SubHome from './sub-home';
 
 
 const drawerWidth = 240;
@@ -89,24 +90,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 // TABLE
-const getTotal = (params) => params.getValue(params.id, 'maths')  + params.getValue(params.id, 'science')
-const columns = [
-  { field: 'maths', headerName: 'Maths', width: 130 },
-  { field: 'science', headerName: 'Science', width: 130 },
-  {
-  field: 'Total',
-  headerName: 'Total marks',
-  width: 160,
-  valueGetter: getTotal,
-  },
-  ];
-  const rows = [
-  { id: 1, maths: 75, science: 60 },
-  { id: 2, maths: 80, science: 70 },
-  { id: 3, maths: 50, science: 80 },
-  { id: 4, maths: 80, science: 60 },
-  { id: 5, maths: 100, science: 90 },
-  ];
+
 
 
 export default function Marketplace(props) {
@@ -238,18 +222,10 @@ export default function Marketplace(props) {
 
       </Drawer>
       
-      {/* STATES ARE CREATED FOR EACH OF THESE THINGS */}
-      {/* <main className={classes.content}>
+      <main className={classes.content}>
         <div className={classes.toolbar} />
-        {home === true ? <h1>Home Page</h1> : null}
-        {alert === true ? <h1>Alert Page</h1> : null}
-        {graph === true ? <h1>Graph Page</h1> : null}
-        {data === true ? <h1>Data Page</h1> : null}
-      </main> */}
-      {/* CONTENT OF THE ALERT PAGE COMES HERE */}
-      <div style={{ height: 400, width: '100%' }}>
-      <DataGrid rows={rows} columns={columns} />
-    </div>
+        <SubHome/>
+      </main>
     </div>
   );
 }
