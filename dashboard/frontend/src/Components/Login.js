@@ -57,7 +57,7 @@ export default class Login extends Component {
                         try {
                             // await axios.post('http://localhost:4000/ids',id)
                             // alert("Logged In as " + res.data.name)
-                            window.location.href="http://localhost:3000/dashboard"
+                            window.location.href="http://localhost:3000/home"
                         }
                         catch (err) {
                             // alert(err)
@@ -72,8 +72,14 @@ export default class Login extends Component {
                  alert(err);
                 }    
         };
-
-        loginhere();
+        if (this.state.UserName == "" || this.state.Password == "" || this.state.NodeId == "")
+        {
+              alert("NULL values are not supported")
+        }
+        else
+        {
+          loginhere();
+        }
   }
 
   render() {

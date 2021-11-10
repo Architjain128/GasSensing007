@@ -20,6 +20,7 @@
     }
     #tandc{
       text-decoration:none;
+      color: blue;
     }
     #tandc:hover{
       color: red;
