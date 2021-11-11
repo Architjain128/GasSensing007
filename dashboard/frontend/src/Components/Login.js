@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {Container,Box,Typography,TextField,Button,Switch} from '@material-ui/core';
-import {AccountCircle} from '@material-ui/icons'
+import {AccountCircle, FlipToBack} from '@material-ui/icons'
 import axios from 'axios';
 import '../files/css/login.css'
 
@@ -44,37 +44,38 @@ export default class Login extends Component {
             Password: this.state.Password,
             NodeId: this.state.NodeId
         }
-
+        const setCookie=(cname, cvalue, exmin)=> {
+          const d = new Date();
+          d.setTime(d.getTime() + (exmin*60*1000));
+          let expires = "expires="+ d.toUTCString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
         const loginhere = async () => {
             try {
                     const res = await axios.post('http://localhost:6050/user/login', newUser);
-                    if(res.status === 200)
+                    console.log(res.data);
+                    
+                    if(res.status == 200)
                     {
-                        //entering the id in database
-                        const id = {
-                            identity: res.data._id
-                        }
-                        try {
-                            // await axios.post('http://localhost:4000/ids',id)
-                            // alert("Logged In as " + res.data.name)
-                            window.location.href="http://localhost:3000/home"
-                        }
-                        catch (err) {
-                            // alert(err)
-                        }
+                      console.log("Login Successful");
+                      let token = res.data.token;
+                      setCookie("gas-user-session", token, 10);
+                      localStorage.setItem("gas-nodeid", this.state.NodeId);
+                      window.location.href="http://localhost:3000/home"
                     }
                     else
                     {
-                      alert("err")
+                      alert("Invalid data entered")
                     }
                 } 
             catch (err) {
-                 alert(err);
-                }    
+                alert("Oops!, can't login now");
+            }
         };
+
         if (this.state.UserName == "" || this.state.Password == "" || this.state.NodeId == "")
         {
-              alert("NULL values are not supported")
+              alert("Enter vaild values.")
         }
         else
         {

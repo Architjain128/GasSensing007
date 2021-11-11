@@ -33,19 +33,38 @@ export default class SubData extends Component {
         this.aaa=this.aaa.bind(this)
     }
     componentDidMount(){
-        this.aaa()
+        const getCookie=(cname) =>{
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        let coo = getCookie("gas-user-session");
+        if(coo == ""){
+            alert("Please login first!");
+            window.location.href = "/";
+        }
+        else{
+            this.aaa()
+        }
     }
     async aaa(){
         let res= await Axios({
                 method: 'get',
-                url: '"https://cors-anywhere.herokuapp.com/https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4"',
+                url: "https://cors-anywhere.herokuapp.com/https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4",
                 headers: {
                     "X-M2M-Origin": "fRZvzNA7Bp:i43Yn0WPem",
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
                 }
             });
-            console.log(res)
+            console.log(res.data)
             // .then(function (res) {
             //     var json_data = [] , rows = [], temp_data = []
             //     temp_data = res.data['m2m:cnt']['m2m:cin']

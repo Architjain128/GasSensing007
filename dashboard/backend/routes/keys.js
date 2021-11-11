@@ -143,7 +143,8 @@ router.post('/user/signup', async (req, res) => {
 router.post('/user/login', async (req, res) => {
     let response = {
         msg: '',
-        status: 100
+        status: 100,
+        token: ''
     }
     const NodeId= req.body.NodeId
     const UserName = req.body.UserName
@@ -189,6 +190,7 @@ router.post('/user/login', async (req, res) => {
                         res.cookie('user_session', Token, { httpOnly: true });
                         response.msg = "User logged in"
                         response.status = 200
+                        response.token = Token
                         return res.json(response)
                     }
                 })

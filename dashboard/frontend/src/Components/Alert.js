@@ -123,8 +123,14 @@ export default function Marketplace(props) {
     setHome(false)
     window.location.href='/data'
   }
-
+  const setCookie=(cname, cvalue, exmin)=> {
+    const d = new Date();
+    d.setTime(d.getTime() + (exmin*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
   const logoutme = () => {
+    setCookie("gas-user-session", "bye", 0);
     window.location.href='/login'
   }
 
