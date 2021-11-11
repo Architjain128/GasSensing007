@@ -30,9 +30,17 @@ var rows = []
 export default class SubData extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            last: "",
+        }
         this.aaa=this.aaa.bind(this)
     }
     componentDidMount(){
+        const refreshy=()=> {
+            this.setState({last: new Date().toLocaleTimeString()})
+            this.aaa();
+            setTimeout(refreshy, 60*1000);
+        }
         const getCookie=(cname) =>{
             let name = cname + "=";
             let ca = document.cookie.split(';');
@@ -53,7 +61,9 @@ export default class SubData extends Component {
             window.location.href = "/";
         }
         else{
-            this.aaa()
+            this.setState({last: new Date().toLocaleTimeString()})
+            this.aaa();
+            setTimeout(refreshy, 60*1000);
         }
     }
     async aaa(){
@@ -65,40 +75,7 @@ export default class SubData extends Component {
                 }
             });
             console.log(res.data)
-            // .then(function (res) {
-            //     var json_data = [] , rows = [], temp_data = []
-            //     temp_data = res.data['m2m:cnt']['m2m:cin']
-            //     for(var i=0;i<temp_data.length;i++)
-            //     {
-            //         json_data.push(temp_data[i]['con'])
-            //     }
-            //     for(var i=0;i<100 && i<json_data.length;i++)
-            //     {
-            //         var time="",reading=""
-            //         var f = 0
-            //         for(var j=1;j<json_data[i].length-1;j++)
-            //         {
-            //             if(json_data[i][j]==',')
-            //             {
-            //                 f=1
-            //                 continue
-            //             }
-            //             if(f==0)
-            //             {
-            //                 time += json_data[i][j]
-            //             }
-            //             else
-            //             {
-            //                 reading += json_data[i][j]
-            //             }
-            //         }
-            //         rows.push({ id: i+1, index: i+1, timestamp: time, reading: reading })
-            //     }
-            // })
-            // .catch(function (error) {
-            //     console.log(error);
-            // });
-        }
+    }
 
     render() {
         return (
@@ -108,6 +85,8 @@ export default class SubData extends Component {
             <br/>
             <div style={{height:"800px"}}>
             <h2>Below are the latest 100 readings:</h2>
+            <h3>All readings will be updated in 60 sec, last updated at {this.state.last}</h3>
+
                 <DataGrid rows={rows} columns={columns}/>
             </div>
         </div>
