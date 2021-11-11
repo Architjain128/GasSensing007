@@ -1,0 +1,77 @@
+{
+    "m2m:cnt": {
+        "rn": "Data",
+        "ty": 3,
+        "ri": "/in-cse/cnt-554721369",
+        "pi": "/in-cse/cnt-708562633",
+        "ct": "20211028T013550",
+        "lt": "20211028T013550",
+        "lbl": [
+            "Team-15"
+        ],
+        "acpi": [
+            "/in-cse/acp-516227225",
+            "/in-cse/acp-511512795"
+        ],
+        "et": "20221028T013550",
+        "st": 4,
+        "mni": 120,
+        "mbs": 10000,
+        "mia": 0,
+        "cni": 4,
+        "cbs": 49,
+        "m2m:cin": [
+            {
+                "rn": "cin_778330669",
+                "ty": 4,
+                "ri": "/in-cse/cin-778330669",
+                "pi": "/in-cse/cnt-554721369",
+                "ct": "20211110T231755",
+                "lt": "20211110T231755",
+                "lbl": [
+                    "Label-1",
+                    "Label-2"
+                ],
+                "st": 0,
+                "cnf": "text/plain:0",
+                "cs": 13,
+                "con": "[time1,data1]"
+            },
+            {
+                "rn": "cin_789279776",
+                "ty": 4,
+                "ri": "/in-cse/cin-789279776",
+                "pi": "/in-cse/cnt-554721369",
+                "ct": "20211110T231803",
+                "lt": "20211110T231803",
+                "lbl": [
+                    "Label-1",
+                    "Label-2"
+                ],
+                "st": 0,
+                "cnf": "text/plain:0",
+                "cs": 13,
+                "con": "[time2,data2]"
+            },
+            {
+                "rn": "cin_807754686",
+                "ty": 4,
+                "ri": "/in-cse/cin-807754686",
+                "pi": "/in-cse/cnt-554721369",
+                "ct": "20211110T231813",
+                "lt": "20211110T231813",
+                "lbl": [
+                    "Label-1",
+                    "Label-2"
+                ],
+                "st": 0,
+                "cnf": "text/plain:0",
+                "cs": 13,
+                "con": "[time3,data3]"
+            }
+        ],
+        "ol": "/in-cse/in-name/Team-15/Node-1/Data/ol",
+        "la": "/in-cse/in-name/Team-15/Node-1/Data/la"
+    }
+}
+
