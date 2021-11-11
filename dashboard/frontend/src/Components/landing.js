@@ -45,7 +45,7 @@ class LandingPage extends Component {
                         </Grid>
                         <Grid item xs={6}>
                             <Paper >
-                                <NavLink to="/signup" style={{ textDecoration: 'none' }}>
+                                <NavLink to="/register" style={{ textDecoration: 'none' }}>
                                     <Button
                                     type="submit"
                                     fullWidth

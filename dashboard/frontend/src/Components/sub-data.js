@@ -89,7 +89,7 @@ export default class SubData extends Component {
                                 let value=reading
                                 var true_reading = "";
                                 var len1 = value.length;
-                                for(let i=0;i<len1;i+=41)
+                                for(let i=1;i<len1;i+=41)
                                 {
                                     true_reading +=value[i];
                                 }
