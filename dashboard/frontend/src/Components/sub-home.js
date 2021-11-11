@@ -34,15 +34,13 @@ const columns = [
  
   // convert XML to JSON
 function xmlToJson(xml,dec) {
-    let rows =[ ]
+    let rows =[]
     xml2js.parseString(xml, (err, result) => {
         if(err) {
             throw err;
         }
-
     const json = JSON.stringify(result, null, 4);
     const obj = JSON.parse(json);
-
     var json_data = [] , temp_data = []
     temp_data = obj['m2m:cnt']['m2m:cin']
     for(var i=0;i<temp_data.length;i++)
@@ -85,8 +83,9 @@ function xmlToJson(xml,dec) {
             }
             rows.push({ id: c, index: c, timestamp: time, reading: dec(reading) })
         }
-    }    
+    }
     });
+    console.log(rows)
     return rows
 }
 
@@ -104,7 +103,7 @@ export default class SubHome extends Component {
     }
     async componentDidMount(){
         async function aaa(){
-            await axios.get("https://cors-anywhere.herokuapp.com/https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4",{
+            await axios.get("https://middlecors.herokuapp.com/https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4",{
                 headers : {
                         "X-M2M-Origin": "fRZvzNA7Bp:i43Yn0WPem",
                     }
@@ -156,7 +155,9 @@ export default class SubHome extends Component {
         }
         return true_reading
     }
-    parseString(value){
+    parseString(value,dec){
+        var rows = xmlToJson(value,this.decryption)
+        console.log(rows)
         this.setState({rows:xmlToJson(value)})
     }
     render() {

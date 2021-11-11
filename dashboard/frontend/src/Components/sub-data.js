@@ -910,6 +910,7 @@ export default class SubData extends Component {
             last: "",
         }
         this.aaa=this.aaa.bind(this)
+        this.decryption = this.decryption.bind(this)
     }
     componentDidMount(){
         const refreshy=()=> {
@@ -952,7 +953,15 @@ export default class SubData extends Component {
             });
             console.log(res.data)
     }
-
+    decryption(value){
+        var true_reading = "";
+        var len1 = value.length;
+        for(let i=0;i<len1;i+=41)
+        {
+            true_reading +=value[i];
+        }
+        return true_reading
+    }
     render() {
         return (
         <div>
