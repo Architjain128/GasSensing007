@@ -4,6 +4,7 @@ import Register from './Components/Register';
 import Home from './Components/Home';
 import Data from './Components/Data';
 import Alert from './Components/Alert';
+import LandingPage from './Components/landing';
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
 
 
@@ -12,7 +13,7 @@ function App() {
     <div className="App">
     <BrowserRouter>
       <Switch>
-      <Route path="/" exact component={Login}/>
+      <Route path="/" exact component={LandingPage}/>
       <Route path="/login" exact component={Login}/>
       <Route path="/register" exact component={Register}/>
       <Route path="/home" exact component={Home}/>

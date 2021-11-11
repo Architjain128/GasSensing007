@@ -156,7 +156,7 @@ export default function Marketplace(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Data Page
+          Olfactory Sensing
           </Typography>
         </Toolbar>
       </AppBar>
