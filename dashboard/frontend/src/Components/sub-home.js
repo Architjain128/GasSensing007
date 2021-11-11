@@ -35,7 +35,7 @@ export default class SubHome extends Component {
     componentDidMount(){
         const axios = require('axios');
         async function aaa(){
-            await axios.get("https://cors-anywhere.herokuapp.com/{https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4}",{
+            await axios.get("https://cors-anywhere.herokuapp.com/https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4",{
                 headers : {
                         "X-M2M-Origin": "fRZvzNA7Bp:i43Yn0WPem",
                         // "Access-Control-Allow-Origin": "https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4",
@@ -44,6 +44,7 @@ export default class SubHome extends Component {
         
             })
             .then(function (res) {
+                console.log(res.data);
                 var json_data = [] , rows = [], temp_data = []
                 temp_data = res.data['m2m:cnt']['m2m:cin']
                 for(var i=0;i<temp_data.length;i++)
