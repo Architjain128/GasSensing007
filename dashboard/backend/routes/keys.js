@@ -10,46 +10,16 @@ const JWT_SECRET_TOKEN = 'd634ac61ded6906fa87a122463e1df846cee88da8ad713c306dfb3
 const stringToEncrypt = 'OurProjectIsBestAndElonMuskWillSwapOurCompanyWithHisTesla';
 const axios = require('axios');
 
-async function generateKey() {
-    return crypto.generateKeyPairSync('rsa', {
-        modulusLength: 2048,
-        publicKeyEncoding: {
-            type: 'spki',
-            format: 'pem'
-        },
-        privateKeyEncoding: {
-            type: 'pkcs8',
-            format: 'pem'
-        }
-    }); 
+
+function generateKey(length) {
+    var result           = '';
+    var characters       = 'abcdefghijklmnopqrstuvwxyz';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }
-
-function encrypt(string, key){
-    return crypto.publicEncrypt(
-        {
-            key: key.publicKey,
-            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-            oaepHash: "sha256",
-        },
-        Buffer.from(string)
-    ).toString('base64');
-}
-
-function decrypt(encrypted_string, key)
-{
-    return  crypto.privateDecrypt(
-        {
-            key: key.privateKey,
-            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-            oaepHash: "sha256",
-        },
-        encrypted_string
-    ).toString('utf-8');
-}
-
-
-
-
 
 router.get('/nodes/all', (req, res) => {
     var response = {
@@ -76,9 +46,9 @@ router.post('/nodes/register', async (req, res) => {
         msg: '',
         status: 100
     }
-    let key= await generateKey()
-    let PrivateKey = key.privateKey
-    let PublicKey = key.publicKey
+    let key= generateKey(16)
+    let PrivateKey = key
+    let PublicKey = key
     if(!NodeId||!PrivateKey||!PublicKey){ 
         response.msg = "Empty Invalid"
         response.status = 400
@@ -144,7 +114,8 @@ router.post('/user/login', async (req, res) => {
     let response = {
         msg: '',
         status: 100,
-        token: ''
+        token: '',
+        key: ''
     }
     const NodeId= req.body.NodeId
     const UserName = req.body.UserName
@@ -167,15 +138,18 @@ router.post('/user/login', async (req, res) => {
                 return res.json(response)
             }
             else {
+                response.key = user.PrivateKey
                 bcrypt.compare(Password, user.Password,(err,isMatch) => {
                     if (err) {
                         response.msg = "Error finding user"
                         response.status = 400
+                        response.key = ""
                         return res.json(response)
                         }
                     else if (!isMatch) {
                         response.msg = "Invalid Password"
                         response.status = 400
+                        response.key = ""
                         return res.json(response)
                     }
                     else {

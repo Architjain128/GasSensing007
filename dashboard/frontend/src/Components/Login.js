@@ -61,6 +61,7 @@ export default class Login extends Component {
                       let token = res.data.token;
                       setCookie("gas-user-session", token, 10);
                       localStorage.setItem("gas-nodeid", this.state.NodeId);
+                      localStorage.setItem("gas-encrypt-key", res.data.key);
                       window.location.href="http://localhost:3000/home"
                     }
                     else
