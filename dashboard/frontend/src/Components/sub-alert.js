@@ -67,7 +67,7 @@ export default class SubAlert extends Component {
                             c+=1
                             f = 0
                             var time="",reading=""
-                            if(str[1]==="6"){
+                            if(str[1]==="6"){   // data channel 6 for old encryption 8 for encryption testing
                                 for(var j=5;j<str.length-1;j++)
                                 {
                                     if(str[j]==',')
