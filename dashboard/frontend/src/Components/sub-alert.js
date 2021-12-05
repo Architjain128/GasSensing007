@@ -16,6 +16,8 @@ const columns = [
   const xml2js = require('xml2js');
   const rows = []
 
+  var hash_key = ''
+
 export default class SubAlert extends Component {
     constructor(props) {
         super(props);
@@ -27,6 +29,9 @@ export default class SubAlert extends Component {
         this.decryption = this.decryption.bind(this)
     }
     async componentDidMount(){
+        // take key from local storage
+        hash_key = localStorage.getItem('gas-encrypt-key')
+
         let roww = []
         async function aaa(){
             await axios.get("https://middlecors.herokuapp.com/https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4",{
@@ -67,7 +72,7 @@ export default class SubAlert extends Component {
                             c+=1
                             f = 0
                             var time="",reading=""
-                            if(str[1]==="6"){   // data channel 6 for old encryption 8 for encryption testing
+                            if(str[1]==="8"){   // data channel 6 for old encryption 8 for encryption testing
                                 for(var j=5;j<str.length-1;j++)
                                 {
                                     if(str[j]==',')
@@ -85,14 +90,21 @@ export default class SubAlert extends Component {
                                     }
                                 }
                                 let value=reading
-                                var true_reading = "";
-                                var len1 = value.length;
-                                for(let i=1;i<len1;i+=41)
+                                // removing whitespaces from front and back
+                                value = value.trim()
+
+                                // decryption
+                                var aesEcb = require('aes-ecb');
+                                var encrypt = Buffer.from(value, 'hex').toString('base64')
+                                var decrypt = aesEcb.decrypt(hash_key, encrypt);
+                                
+                                var true_reading = ''
+                                for(let i=0;i<7;i++)
                                 {
-                                    true_reading +=value[i];
+                                    true_reading+=decrypt[i]
                                 }
-                                true_reading = parseInt(true_reading)
-                                if(true_reading>3000)
+
+                                if(true_reading>'3000')
                                 rows.push({ id: c, index: c, timestamp: time, reading: true_reading, status: "☠️"})
                             }
                         }
@@ -176,7 +188,7 @@ export default class SubAlert extends Component {
                             {this.state.rows.length==0?<h3>Yay, No Alerts moments encountered</h3>:
                             <TableContainer component={Paper}>
                                 <Table  aria-label="simple table">
-                                    <TableHead>
+                                    <TableHead style={{backgroundColor: '#56a1db'}}>
                                         <TableRow>
                                             <TableCell align="left">Timestamp</TableCell>
                                             <TableCell align="center">Reading</TableCell>

@@ -10,6 +10,7 @@ const xml2js = require('xml2js');
 
 
 let row=[]
+var hash_key = ''
 
 const columns = [
   { field: 'index', headerName: 'Index', width: 130 },
@@ -50,6 +51,9 @@ export default class SubHome extends Component {
     }
 
     async componentDidMount(){
+        // take key from local storage
+        hash_key = localStorage.getItem('gas-encrypt-key')
+
         let roww = []
         let statee = []
         async function aaa(){
@@ -91,7 +95,7 @@ export default class SubHome extends Component {
                             c+=1
                             f = 0
                             var time="",reading=""
-                            if(str[1]==="6"){
+                            if(str[1]==="8"){
                                 for(var j=5;j<str.length-1;j++)
                                 {
                                     if(str[j]==',')
@@ -108,17 +112,24 @@ export default class SubHome extends Component {
                                         reading += str[j]
                                     }
                                 }
-                                var value=reading
-                                console.log("got: ",time,value)
+                                let value=reading
+                                // removing whitespaces from front and back
+                                value = value.trim()
+
+                                // decryption
+                                var aesEcb = require('aes-ecb');
+                                var encrypt = Buffer.from(value, 'hex').toString('base64')
+                                var decrypt = aesEcb.decrypt(hash_key, encrypt);
                                 
-                                var true_reading = "";
-                                for(let xx=1;xx<value.length;xx+=41)
+                                var true_reading = ''
+                                for(let i=0;i<7;i++)
                                 {
-                                    true_reading +=value[xx];
+                                    true_reading+=decrypt[i]
                                 }
+
+                                console.log("got: ",time,value)
                                 console.log("parsed ",time,true_reading)
-                                true_reading = parseInt(true_reading)
-                                if(true_reading>3000)
+                                if(true_reading>'3000')
                                 rows.push({ id: c, index: c, timestamp: time, reading: true_reading, status: "☠️"})
                                 else 
                                 rows.push({ id: c, index: c, timestamp: time, reading: true_reading, status: "✔️"})
@@ -136,7 +147,7 @@ export default class SubHome extends Component {
                         rows[i].index=i
                         rows[i].id=i
                         lb.push(rows[rows.length-i-1].timestamp)
-                        val.push(rows[rows.length-i-1].reading)
+                        val.push(parseFloat(rows[rows.length-i-1].reading))
                         tt.push(rows[rows.length-i-1])
 
                     }
@@ -254,7 +265,7 @@ export default class SubHome extends Component {
                                 <>
                                 <TableContainer component={Paper}>
                                     <Table  aria-label="simple table">
-                                        <TableHead>
+                                        <TableHead style={{backgroundColor: '#56a1db'}}>
                                             <TableRow>
                                                 <TableCell align="left">Timestamp</TableCell>
                                                 <TableCell align="center">Reading</TableCell>
