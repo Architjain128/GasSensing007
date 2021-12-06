@@ -5,6 +5,7 @@ import { Line } from 'react-chartjs-2';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import {TableBody, TableCell, TableHead, TableRow, Table,Paper,TableContainer} from '@material-ui/core';
+var aesEcb = require('aes-ecb');
 const xml2js = require('xml2js');
 
 
@@ -53,9 +54,9 @@ export default class SubHome extends Component {
     async componentDidMount(){
         // take key from local storage
         hash_key = localStorage.getItem('gas-encrypt-key')
-
         let roww = []
         let statee = []
+
         async function aaa(){
             await axios.get("https://middlecors.herokuapp.com/https://esw-onem2m.iiit.ac.in/~/in-cse/in-name/Team-15/Node-1/Data/?rcn=4",{
                 headers : {
@@ -63,7 +64,7 @@ export default class SubHome extends Component {
                     }
             })
             .then(function (res) {
-                // console.log(res.data);
+                console.log("polled")
                 let rows = []
                 xml2js.parseString(res.data, (err, result) => {
                     if(err) {
@@ -95,7 +96,7 @@ export default class SubHome extends Component {
                             c+=1
                             f = 0
                             var time="",reading=""
-                            if(str[1]==="8"){
+                            if(str[1]==="1" && str[2]==="0"){
                                 for(var j=5;j<str.length-1;j++)
                                 {
                                     if(str[j]==',')
@@ -117,7 +118,6 @@ export default class SubHome extends Component {
                                 value = value.trim()
 
                                 // decryption
-                                var aesEcb = require('aes-ecb');
                                 var encrypt = Buffer.from(value, 'hex').toString('base64')
                                 var decrypt = aesEcb.decrypt(hash_key, encrypt);
                                 
@@ -127,8 +127,6 @@ export default class SubHome extends Component {
                                     true_reading+=decrypt[i]
                                 }
 
-                                console.log("got: ",time,value)
-                                console.log("parsed ",time,true_reading)
                                 if(true_reading>'3000')
                                 rows.push({ id: c, index: c, timestamp: time, reading: true_reading, status: "☠️"})
                                 else 
@@ -141,7 +139,7 @@ export default class SubHome extends Component {
                 let tt=[]
                 let lb=[]
                 let val=[]
-                for(var i=0;i<10;i++)
+                for(var i=0;i<20;i++)
                 {
                     if(rows.length-i-1>=0){
                         rows[i].index=i
@@ -155,17 +153,17 @@ export default class SubHome extends Component {
                 statee = {
                     labels: lb.reverse(),
                     datasets: [
-                      {
-                        label: 'Gas Readings',
-                        fill: false,
-                        lineTension: 0.5,
-                        backgroundColor: 'rgba(75,192,192,1)',
-                        borderColor: 'rgba(0,0,0,1)',
-                        borderWidth: 2,
-                        data: val.reverse()
-                      }
+                        {
+                            label: 'Gas Readings',
+                            fill: false,
+                            lineTension: 0.5,
+                            backgroundColor: 'rgba(75,192,192,1)',
+                            borderColor: 'rgba(0,0,0,1)',
+                            borderWidth: 2,
+                            data: val.reverse()
+                        }
                     ]
-                  }
+                }
                 roww = tt
                 return rows
             })
@@ -174,11 +172,7 @@ export default class SubHome extends Component {
                 return -1
             });
         }
-        const refreshy=()=> {
-            this.setState({load:true,last: new Date().toLocaleTimeString()})
-            aaa()
-            setTimeout(refreshy, 30*1000);
-        }
+        
         const getCookie=(cname) =>{
             let name = cname + "=";
             let ca = document.cookie.split(';');
@@ -193,6 +187,25 @@ export default class SubHome extends Component {
             }
             return "";
         }
+
+
+        const refreshy=()=> {
+            this.setState({load:true,last: new Date().toLocaleTimeString()})
+            let vv = aaa();
+            if(vv==-1){
+                alert("Please login first!");
+                window.location.href = "/login";
+            }
+            else{
+                // console.log(roww)
+                row=roww
+                sstate=statee
+                this.setState({rows: roww})
+                this.setState({load:false})
+            }
+            setTimeout(refreshy,10*1000);
+        }
+        
         let coo = getCookie("gas-user-session");
         if(coo == ""){
             alert("Please login first!");
@@ -203,15 +216,16 @@ export default class SubHome extends Component {
             let vv = await aaa();
             if(vv==-1){
                 alert("Please login first!");
+                window.location.href = "/login";
             }
             else{
-                console.log(roww)
+                // console.log(roww)
                 row=roww
                 sstate=statee
                 this.setState({rows: roww})
                 this.setState({load:false})
             }
-            setTimeout(refreshy, 30*1000);
+            setTimeout(refreshy, 10*1000);
         }
     }
 
@@ -259,7 +273,7 @@ export default class SubHome extends Component {
                     </Grid>
                     <Grid item xs={5}>
                         <div style={{height:"400px"}}>
-                            <h2>Below are the latest 10 readings:</h2>
+                            <h2>Below are the latest 20 readings:</h2>
                             {
                                 this.state.load==true?<h3>Loading...</h3>:
                                 <>
@@ -272,6 +286,7 @@ export default class SubHome extends Component {
                                                 <TableCell align="right">Status</TableCell>
                                             </TableRow>
                                         </TableHead>
+                                <div style={{overflowY:"scroll", height:"360px"}}>
                                         <TableBody>
                                             {this.state.rows.map((row) => (
                                                 <TableRow key={row.id}>
@@ -281,6 +296,7 @@ export default class SubHome extends Component {
                                                 </TableRow>
                                             ))}
                                         </TableBody>
+                                </div>
                                     </Table>
                                 </TableContainer>
                                 </>

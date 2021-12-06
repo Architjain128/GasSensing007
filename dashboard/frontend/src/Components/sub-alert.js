@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { DataGrid, RowsProp, ColDef } from "@material-ui/data-grid";
 import '../files/css/login.css'
 import axios from 'axios';
-import {TableBody, TableCell, TableHead, TableRow, Table,Paper,TableContainer} from '@material-ui/core';
+import {TableBody, TableCell, TableHead, TableRow, Table,Paper,TableContainer, colors} from '@material-ui/core';
 import { Grid } from "@material-ui/core";
 
 
@@ -72,7 +72,7 @@ export default class SubAlert extends Component {
                             c+=1
                             f = 0
                             var time="",reading=""
-                            if(str[1]==="8"){   // data channel 6 for old encryption 8 for encryption testing
+                            if(str[1]==="1" && str[2]==="0"){   // data channel 6 for old encryption 8 for encryption testing
                                 for(var j=5;j<str.length-1;j++)
                                 {
                                     if(str[j]==',')
@@ -121,7 +121,16 @@ export default class SubAlert extends Component {
         }
         const refreshy=()=> {
             this.setState({load:true,last: new Date().toLocaleTimeString()})
-            aaa()
+            let vv = aaa();
+            if(vv==-1){
+                alert("Please login first!");
+            }
+            else{
+                console.log(roww)
+                // row=roww
+                this.setState({rows: roww})
+                this.setState({load:false})
+            }
             setTimeout(refreshy, 60*1000);
         }
         const getCookie=(cname) =>{
@@ -170,12 +179,12 @@ export default class SubAlert extends Component {
     render() {
         return (
         <div>
-                <h1>Alert Page</h1>
 
             <Grid container spacing={3}>
                 <Grid item xs={2}>
                 </Grid>
                 <Grid item xs={10}>
+                    <h1>Alert Page</h1>
                     <h2>Below are the all the Alert ☠️ readings (Last updated at: {this.state.last})</h2>
                 </Grid>
                 <Grid item xs={2}>
@@ -185,25 +194,29 @@ export default class SubAlert extends Component {
                         {
                             this.state.load==true?<h3>Loading...</h3>:
                             <>
-                            {this.state.rows.length==0?<h3>Yay, No Alerts moments encountered</h3>:
-                            <TableContainer component={Paper}>
-                                <Table  aria-label="simple table">
-                                    <TableHead style={{backgroundColor: '#56a1db'}}>
-                                        <TableRow>
-                                            <TableCell align="left">Timestamp</TableCell>
-                                            <TableCell align="center">Reading</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {this.state.rows.map((row) => (
-                                            <TableRow key={row.id}>
-                                                <TableCell align="left">{row.timestamp}</TableCell>
-                                                <TableCell align="center">{row.reading}</TableCell>
+                            {this.state.rows.length==0?<h3 style={{backgroundColor:"#8ef5b4", color:"#006926",paddingTop:"2%",paddingBottom:"2%",borderRadius:"15px",textAlign:"center", paddingLeft:"5%", margin:"auto"}} >Yay, No Alerts moments encountered till now</h3>:
+                            <>
+                            <div style={{overflowY:"scroll", height:"400px"}} >
+                                <TableContainer component={Paper}>
+                                    <Table aria-label="sticky table">
+                                        <TableHead style={{backgroundColor: '#56a1db'}}>
+                                            <TableRow>
+                                                <TableCell align="left">Timestamp</TableCell>
+                                                <TableCell align="center">Reading</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                                        </TableHead>
+                                        <TableBody >
+                                            {this.state.rows.map((row) => (
+                                                <TableRow key={row.id}>
+                                                    <TableCell align="left">{row.timestamp}</TableCell>
+                                                    <TableCell align="center">{row.reading}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </div>
+                            </>
                             }
                             </>
                         }
