@@ -236,37 +236,25 @@ export default class SubHome extends Component {
                 <h1>Home Page</h1>
                 <Grid container spacing={2}>
                     <Grid item xs={5}>
-                        <div style={{height:"400px"}}>
+                        <div >
                             <h2>Graph Plotting:</h2>
-                            <div style={{height:"100px", width:"500px"}}>
+                            <div style={{height:"350px"}}>
                                 <Line
                                     data={sstate}
                                     options={{
-                                    title:{
-                                        display:true,
-                                        text:'Gas sensed',
-                                        fontSize:20
-                                    },
-                                    legend:{
-                                        display:true,
-                                        position:'right'
-                                    }
+                                        title:{
+                                            display:true,
+                                            text:'Gas sensed',
+                                            fontSize:20
+                                        },
+                                        legend:{
+                                            display:true,
+                                            position:'right'
+                                        }
                                     }}
                                 />
                             </div>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <h3>All readings will be updated in 30 sec, last updated at {this.state.last}</h3>
+                            <h3>All readings will be updated in 10 sec, last updated at {this.state.last}</h3>
                         </div>
                     </Grid>
                     <Grid item xs={1}>
@@ -277,6 +265,7 @@ export default class SubHome extends Component {
                             {
                                 this.state.load==true?<h3>Loading...</h3>:
                                 <>
+                                <div style={{overflowY:"scroll", height:"360px"}}>
                                 <TableContainer component={Paper}>
                                     <Table  aria-label="simple table">
                                         <TableHead style={{backgroundColor: '#56a1db'}}>
@@ -286,7 +275,6 @@ export default class SubHome extends Component {
                                                 <TableCell align="right">Status</TableCell>
                                             </TableRow>
                                         </TableHead>
-                                <div style={{overflowY:"scroll", height:"360px"}}>
                                         <TableBody>
                                             {this.state.rows.map((row) => (
                                                 <TableRow key={row.id}>
@@ -296,9 +284,9 @@ export default class SubHome extends Component {
                                                 </TableRow>
                                             ))}
                                         </TableBody>
-                                </div>
                                     </Table>
                                 </TableContainer>
+                                </div>
                                 </>
                             }
                         </div>
