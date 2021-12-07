@@ -8,6 +8,7 @@
 #include <ThingSpeak.h>
 #include <ESP_Mail_Client.h>
 #include "RTClib.h"
+#include "mbedtls/aes.h"
 
 const long CHANNEL = 1504402;
 const char *WRITE_API = "ZHCU1BHIGMOIDMZU";
@@ -23,8 +24,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define LOGO_HEIGHT   16
 #define LOGO_WIDTH    16
 
-#define WIFI_SSID "Railwire"
-#define WIFI_PASSWORD "Swapnil@2020"
+#define WIFI_SSID "realme 3"
+#define WIFI_PASSWORD "pppppppp"
 WiFiClient client;
 
 #define SMTP_HOST "smtp.gmail.com"
@@ -46,6 +47,14 @@ long prevMillisSensor = 0;
 int intervalSensor = 2000;
 long prevMillisThingSpeak = 0;
 int intervalThingSpeak = 1000;
+
+void encrypt(char * plainText, char * key, unsigned char * outputBuffer){
+  mbedtls_aes_context aes;
+  mbedtls_aes_init( &aes );
+  mbedtls_aes_setkey_enc( &aes, (const unsigned char*) key, strlen(key) * 8 );
+  mbedtls_aes_crypt_ecb( &aes, MBEDTLS_AES_ENCRYPT, (const unsigned char*)plainText, outputBuffer);
+  mbedtls_aes_free( &aes );
+}
 
 void setup() {
   Serial.begin(115200);
@@ -118,7 +127,25 @@ void sendDataToOneM2M(int reading, bool aboveT) {
   http.addHeader("Connection", "close");
   
   DateTime now = rtc.now();
-  String timeStamp = String(now.hour()) + ":" + String(now.minute()) + ":" + String(now.second());
+  int sec = now.second(), minut = now.minute(), hr = now.hour(), mont = now.month(), dayy = now.day();
+  String Sec = String(sec), Min = String(minut), Hr = String(hr), Month = String(mont), Day = String(dayy);
+  if(sec < 10){
+    Sec = "0" + Sec;
+  }
+  if(minut < 10) {
+    Min = "0" + Min;
+  }
+  if(hr < 10) {
+    Hr = "0" + Hr;
+  }
+  if(mont < 10) {
+    Month = "0" + Month;
+  }
+  if(dayy < 10) {
+    Day = "0" + Day;
+  }
+  String timeStamp = Hr + ":" + Min + ":" + Sec;
+  String date = String(now.year()) + '/' + Month + '/' + Day;
 
   String message = String(reading);
   String p = "%$6@#2&*()__-+=;,.<>3/~`%$7@#^&8()55_-+9";
@@ -129,8 +156,22 @@ void sendDataToOneM2M(int reading, bool aboveT) {
     ch = message[i];
         encrypted_mes += ch + p;      
   }
+
+  mbedtls_aes_context aes;
+  char *key = "zyqonqidsgqfshzz";
+  char *input_text  ="2599.69";
+//  unsigned char decrypted_text_output[16];
+  unsigned char encrypted_text_output[16];
+  encrypt(input_text, key, encrypted_text_output);
+  String tempStr;
+
+  for (int i = 0; i < 16; i++) {
+    char str[1];
+    sprintf(str, "%02x", (int)encrypted_text_output[i]);
+    tempStr += str;
+  }
   
-  int httpResponseCode = http.POST("{\"m2m:cin\":{\"lbl\":[ \"Label-1\",\"Label-2\"],\"con\": \"[1," + timeStamp + ", " + encrypted_mes + "]\"}}");
+  int httpResponseCode = http.POST("{\"m2m:cin\":{\"lbl\":[ \"Label-1\",\"Label-2\"],\"con\": \"[7  ," + date + " " + timeStamp + ", " +tempStr + "]\"}}");
   if(httpResponseCode>0){
     String response = http.getString();                       
     Serial.println(httpResponseCode);   
