@@ -95,7 +95,7 @@ export default class SubHome extends Component {
                             c+=1
                             f = 0
                             var time="",reading=""
-                            if(str[1]==="8"){
+                            if(str[1]==="7"){
                                 for(var j=5;j<str.length-1;j++)
                                 {
                                     if(str[j]==',')
@@ -116,6 +116,8 @@ export default class SubHome extends Component {
                                 // removing whitespaces from front and back
                                 value = value.trim()
 
+                                console.log(value)
+
                                 // decryption
                                 var aesEcb = require('aes-ecb');
                                 var encrypt = Buffer.from(value, 'hex').toString('base64')
@@ -133,6 +135,8 @@ export default class SubHome extends Component {
                                 rows.push({ id: c, index: c, timestamp: time, reading: true_reading, status: "☠️"})
                                 else 
                                 rows.push({ id: c, index: c, timestamp: time, reading: true_reading, status: "✔️"})
+
+                                console.log(rows)
                             }
                         }
                     }

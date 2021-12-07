@@ -74,7 +74,7 @@ export default class SubData extends Component {
                             c+=1
                             f = 0
                             var time="",reading=""
-                            if(str[1]==="8"){
+                            if(str[1]==="9"){
                                 for(var j=5;j<str.length-1;j++)
                                 {
                                     if(str[j]==',')
