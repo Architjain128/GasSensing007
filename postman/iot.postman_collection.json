@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "a47dbaba-3ce6-4ae6-b6d3-5c03c76b6bfb",
+		"name": "iot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:6050/user/logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"NodeId\":\"000001\",\r\n    \"UserName\":\"test\",\r\n    \"Password\":\"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6050/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6050",
+					"path": [
+						"user",
+						"login"
+					]
+				},
+				"description": "logout"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:6050/nodes/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"NodeId\":\"000002\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6050/nodes/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6050",
+					"path": [
+						"nodes",
+						"register"
+					]
+				},
+				"description": "add new node with no user"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:6050/nodes/all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6050/nodes/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6050",
+					"path": [
+						"nodes",
+						"all"
+					]
+				},
+				"description": "dummy api to see all info"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:6050/user/signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"NodeId\": \"000004\",\r\n    \"UserName\":\"test\",\r\n    \"Password\":\"123\",\r\n    \"MobileNumber\":\"8107212111\",\r\n    \"Email\":\"architjain10202@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6050/user/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6050",
+					"path": [
+						"user",
+						"signup"
+					]
+				},
+				"description": "ad user to node"
+			},
+			"response": []
+		}
+	]
+}

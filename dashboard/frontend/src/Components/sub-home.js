@@ -122,12 +122,12 @@ export default class SubHome extends Component {
                                 var decrypt = aesEcb.decrypt(hash_key, encrypt);
                                 
                                 var true_reading = ''
-                                for(let i=0;i<7;i++)
+                                for(let i=0;i<6;i++)
                                 {
                                     true_reading+=decrypt[i]
                                 }
 
-                                if(true_reading>'3000')
+                                if(true_reading>'500')
                                 rows.push({ id: c, index: c, timestamp: time, reading: true_reading, status: "☠️"})
                                 else 
                                 rows.push({ id: c, index: c, timestamp: time, reading: true_reading, status: "✔️"})
@@ -271,7 +271,7 @@ export default class SubHome extends Component {
                                         <TableHead style={{backgroundColor: '#56a1db'}}>
                                             <TableRow>
                                                 <TableCell align="left">Timestamp</TableCell>
-                                                <TableCell align="center">Reading</TableCell>
+                                                <TableCell align="center">Reading (in mV)</TableCell>
                                                 <TableCell align="right">Status</TableCell>
                                             </TableRow>
                                         </TableHead>
